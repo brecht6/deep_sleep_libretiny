@@ -36,6 +36,26 @@ ota:
         - deep_sleep_libretiny.prevent: deep_sleep_lt
 ```
 
-# issues
-When the original deep_sleep component is used, esphome seamlessly enables a flag that tells Home Assistant the devices uses deep sleep. This enables HA mechanism that prevents showing the sleeping device as unavailable.
+## Fixing the "unavailable" state in Home Assistant
+When the original deep_sleep component is used, esphome seamlessly enables a flag that tells Home Assistant the device uses deep sleep. This enables HA mechanism that prevents showing the sleeping device as unavailable.
 I have found no way to enable this flag from external component, therefore the above mechanism does not work and in result the device shows up as unavailable.
+You can fix this by modyfying _esphome/components/api/api_connection.cpp_ in your local copy of esphome as follows:
+
+replace this part:
+```c++
+#ifdef USE_DEEP_SLEEP
+#include "esphome/components/deep_sleep/deep_sleep_component.h"
+#endif
+```
+
+with this code:
+```c++
+#ifdef USE_DEEP_SLEEP
+namespace esphome::deep_sleep {
+extern bool global_has_deep_sleep;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+#endif
+}
+```
+
+Then build the firmware and flash your device.
+Remember that in order for the change to be noticed by Home Assistant, you need to remove and then re-add your device in HA.
