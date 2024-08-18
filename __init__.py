@@ -109,7 +109,7 @@ async def to_code(config):
                 )
             )
 
-    # cg.add_define("USE_DEEP_SLEEP")
+    cg.add_define("USE_DEEP_SLEEP")
 
 
 DEEP_SLEEP_ACTION_SCHEMA = cv.Schema(
