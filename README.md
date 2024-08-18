@@ -53,8 +53,8 @@ with this code:
 #ifdef USE_DEEP_SLEEP
 namespace esphome::deep_sleep {
 extern bool global_has_deep_sleep;  // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
-#endif
 }
+#endif
 ```
 
 Then build the firmware and flash your device.
