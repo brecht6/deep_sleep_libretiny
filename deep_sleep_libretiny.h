@@ -94,7 +94,12 @@ class DeepSleepLibretiny : public Component {
   optional<uint32_t> run_duration_;
   bool next_enter_deep_sleep_{false};
   bool prevent_{false};
-  bool pin_prevents_sleep(WakeUpPinItem& pinItem);
+  bool pin_prevents_sleep(WakeUpPinItem& pinItem) const;
+
+  bool get_real_pin_state(InternalGPIOPin& pin) const
+  {
+    return (pin.digital_read() ^ pin.is_inverted());
+  }
 };
 
 template<typename... Ts> class EnterDeepSleepAction : public Action<Ts...> {
